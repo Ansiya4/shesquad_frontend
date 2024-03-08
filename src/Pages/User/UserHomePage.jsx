@@ -5,7 +5,7 @@ import { StickyNavbar } from '../../Components/navbar/Navbar'
 function UserHomePage() {
   return (
     <div>
-      <div className='mt-6 bg-deep-purple-900'>
+      <div className='bg-deep-purple-900 w-full'>
         <StickyNavbar/>
       </div>
       {/* <div>
