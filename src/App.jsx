@@ -10,6 +10,7 @@ import AdminProtected from './ProtectedRouter/AdminProtected';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import ExpertsProtected from './ProtectedRouter/ExpertsProtected';
 import ExpertHomePage from './Pages/Expert/ExpertHomePage';
+import ExpertProfile from './Pages/Expert/ExpertProfile';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           {/* </Route> */}
           {/* <Route element={<ExpertsProtected />}> */}
             <Route path="experthome/" element={<ExpertHomePage />} />
+            <Route path="expertprofile/" element={<ExpertProfile />} />
           {/* </Route> */}
           {/* <Route element={<AdminProtected />}> */}
             <Route path="dashboard" element={<Dashboard />} />
