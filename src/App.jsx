@@ -11,11 +11,14 @@ import Dashboard from './Pages/Dashboard/Dashboard';
 import ExpertsProtected from './ProtectedRouter/ExpertsProtected';
 import ExpertHomePage from './Pages/Expert/ExpertHomePage';
 import ExpertProfile from './Pages/Expert/ExpertProfile';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
   return (
     <>
+    <ToastContainer />
        <Router>
         <Routes>
           {/* <Route element={<PrivateRoutes />}> */}
