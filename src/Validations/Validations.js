@@ -18,6 +18,11 @@ export const ProfileSchema = Yup.object({
   description: Yup.string().trim().min(4).required("Please enter Description"),
 });
 
+export const UserProfileSchema = Yup.object({
+  first_name: Yup.string().trim().min(4).required("Please enter First name"),
+  last_name: Yup.string().trim().min(4).required("Please enter Last name"),
+  });
+
 export const PasswordSchema = Yup.object({
 old_password: Yup.string().trim().min(4).required("Please enter Old password"),
 new_password: Yup.string().trim().min(4).required("Please enter New password"),

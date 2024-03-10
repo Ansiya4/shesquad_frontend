@@ -70,7 +70,7 @@ export function EditCategory({open,handleOpen,afterEdit,showtabledata}) {
             <Dialog open={open} handler={handleOpen}>
                 
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <DialogHeader>Create category</DialogHeader>
+                    <DialogHeader className="text-indigo-900 font-serif">EDIT CATEGORY</DialogHeader>
                     <div className="mx-5">
                         <div className="w-full overflow-auto h-36 mb-5">
                             <img src={cat_image ? URL.createObjectURL(cat_image): showtabledata.cat_image} alt="" className="" />
@@ -120,13 +120,13 @@ export function EditCategory({open,handleOpen,afterEdit,showtabledata}) {
                     <DialogFooter>
                         <Button
                             variant="text"
-                            color="red"
+                            color="gray"
                             onClick={handleOpen}
                             className="mr-1"
                         >
                             <span>Cancel</span>
                         </Button>
-                        <Button variant="gradient" color="green" type="submit" >
+                        <Button className="bg-pink-900" type="submit" >
                             <span>Edit Category</span>
                         </Button>
                     </DialogFooter>

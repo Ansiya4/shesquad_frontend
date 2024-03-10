@@ -22,17 +22,17 @@ function ProfileUser() {
                     <Card className='w-3/5'>
                     <div className="mb-4 ml-9 mt-10">
                         <p className="text-base text-blue-gray-800 text-left">
-                            Full Name : 
+                            First Name : 
+                        </p>
+                    </div>
+                    <div className="mb-4 ml-9 mt-5">
+                        <p className="text-base text-blue-gray-800 text-left">
+                            Last Name : 
                         </p>
                     </div>
                     <div className="mb-4 ml-9 mt-5">
                         <p className="text-base text-blue-gray-800 text-left">
                             Email : 
-                        </p>
-                    </div>
-                    <div className="mb-4 ml-9 mt-5">
-                        <p className="text-base text-blue-gray-800 text-left">
-                            Phone : 
                         </p>
                     </div>
                     <div className='flex mt-9'>

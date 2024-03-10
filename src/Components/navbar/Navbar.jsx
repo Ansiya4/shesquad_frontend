@@ -66,7 +66,7 @@ export function StickyNavbar() {
           <Avatar className="h-7 w-7 border border-gray-900" src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
         </MenuHandler>
         {token ? (<MenuList>
-          <Link to={decoded.category ? '/expertprofile' : 'userprofile'}> <MenuItem>My Profile</MenuItem></Link>
+          <Link to={decoded.category ? '/expertprofile' : '/userprofile'}> <MenuItem>My Profile</MenuItem></Link>
           <MenuItem onClick={LogOut}>Log out</MenuItem>
         </MenuList>) : ''}
       </Menu>

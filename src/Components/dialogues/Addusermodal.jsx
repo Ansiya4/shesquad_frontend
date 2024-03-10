@@ -60,11 +60,11 @@ export function Addusermodal() {
 
     return (
         <>
-            <Button onClick={handleOpen} className="flex items-center gap-3" size="sm">
+            <Button onClick={handleOpen} className="flex items-center gap-3 bg-pink-900" size="sm">
                 <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Experts
             </Button>
             <Dialog open={open} handler={handleOpen}>
-                <DialogHeader>Add Experts</DialogHeader>
+                <DialogHeader className="text-indigo-900 font-serif">ADD EXPERTS</DialogHeader>
                 <form onSubmit={handleSubmit}>
                     <DialogBody className="">
                         <div className="w-full px-5">
@@ -145,13 +145,13 @@ export function Addusermodal() {
                     <DialogFooter>
                         <Button
                             variant="text"
-                            color="red"
+                            color="gray"
                             onClick={handleOpen}
                             className="mr-1"
                         >
                             <span>Cancel</span>
                         </Button>
-                        <Button variant="gradient" type="submit" color="green">
+                        <Button type="submit" className="bg-pink-900">
                             <span>Create user</span>
                         </Button>
                     </DialogFooter>

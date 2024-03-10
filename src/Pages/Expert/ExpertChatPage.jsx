@@ -11,16 +11,18 @@ import { jwtDecode } from 'jwt-decode';
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom';
-import { BACKEND_BASE_URL } from '../../api/api';
+import { api } from '../../AxiosUtils/AxiosUtils';
 import { wsApiUrl } from '../../api/api';
 import { StickyNavbar } from '../../Components/navbar/Navbar'
+import { GetChatExpertListUserSide } from '../../services/services';
+import { w3cwebsocket } from 'websocket';
 
-function ExpertChatPage() {
+function UserChatPage() {
     const token = localStorage.getItem('token')
     const decoded = jwtDecode(token);
 
     const location = useLocation();
-    const user_id = location.state && location.state.user_id;
+    const expert_id = location.state && location.state.user_id;
     const UserInfo = decoded
     const [clientstate, setClientState] = useState("");
     const [search, setSearch] = useState('')
@@ -28,9 +30,21 @@ function ExpertChatPage() {
     const [messages, setMessages] = useState([]);
     const [senderdetails, setsenderdetails] = useState(UserInfo);
     const [recipientdetails, setrecipientdetails] = useState();
-
     const messageRef = useRef();
 
+    // Fetch ExpertsData
+    const UserList = async () => {
+        try {
+            const res = await GetChatExpertListUserSide(expert_id ? expert_id : UserInfo.user_id);
+            if (res.status === 200) {
+                console.log(res.data);
+                setSearchList(res.data);
+            }
+        } catch (error) { }
+    };
+    useEffect(() => {
+        UserList()
+    }, [])
 
     // Chatting Function
     const onSubmit = (e) => {
@@ -49,12 +63,12 @@ function ExpertChatPage() {
     };
 
     const setUpChat = () => {
-        if (!senderdetails.id || !recipientdetails?.id) {
+        if (!senderdetails.user_id || !recipientdetails?.id) {
             return;
         }
-        userAxiosInstant
+        api
             .get(
-                `chat/user-previous-chats/${senderdetails.id}/${recipientdetails.id}/`
+                `chat/user-previous-chats/${senderdetails.user_id}/${recipientdetails.id}/`
             )
             .then((response) => {
                 if (response.status == 200) {
@@ -62,7 +76,7 @@ function ExpertChatPage() {
                 }
             });
         const client = new w3cwebsocket(
-            `${wsApiUrl}/ws/chat/${senderdetails.id}/?${recipientdetails.id}`
+            `${wsApiUrl}/ws/chat/${senderdetails.user_id}/?${recipientdetails.id}`
         );
         setClientState(client);
         client.onopen = () => {
@@ -91,7 +105,7 @@ function ExpertChatPage() {
     };
 
     useEffect(() => {
-        if (senderdetails.id && recipientdetails?.id) {
+        if (senderdetails.user_id && recipientdetails?.id) {
             setUpChat();
         }
         if (messageRef.current) {
@@ -99,17 +113,6 @@ function ExpertChatPage() {
         }
     }, [senderdetails, recipientdetails?.id]);
 
-    const recieverData = async () => {
-        try {
-            const res = await UserDetails(Reciever.id);
-            setrecipientdetails(res.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    useEffect(() => {
-        recieverData();
-    }, [recipientdetails]);
     return (
         <>
             <div className='h-screen'>
@@ -142,28 +145,28 @@ function ExpertChatPage() {
                             {SearchList.map((userlist) => (
                                 <div className={`${recipientdetails?.id === userlist.id ? 'h-16 m-2 px-2 bg-gray-200 grid grid-cols-[3rem,1fr,3rem] cursor-pointer rounded-lg' : 'h-16 m-2 px-2 bg-white grid grid-cols-[3rem,1fr,3rem] cursor-pointer hover:rounded-lg hover:bg-gray-100'}`}
                                     onClick={() => setrecipientdetails({
-                                        email: userlist.email,
-                                        id: userlist.id,
-                                        profile_image: userlist.profile_image,
-                                        first_name: userlist.first_name,
-                                        last_name: userlist.last_name
+                                        email: userlist.user.email,
+                                        id: userlist.user.id,
+                                        profile_picture: userlist.user.profile_picture,
+                                        first_name: userlist.user.first_name,
+                                        last_name: userlist.user.last_name
                                     })}>
                                     <div className='flex justify-center items-center'>
                                         <Badge overlap="circular" color="green" placement="bottom-end">
                                             <Avatar
-                                                src={userlist.profile_image ? userlist.profile_image : "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"}
+                                                src={userlist.user.profile_picture ? userlist.user.profile_picture : "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"}
                                                 alt="profile picture"
                                             />
                                         </Badge>
                                     </div>
 
                                     <div className='m-3'>
-                                        <p className='text-black text-sm capitalize'>{userlist.first_name} {userlist.first_name}</p>
+                                        <p className='text-black text-sm capitalize'>{userlist.user.first_name} {userlist.user.first_name}</p>
                                         <p className='text-gray-800 text-xs'>You: Parada</p>
                                     </div>
 
                                     <div className='flex justify-center items-center'>
-                                        <Badge content="5">
+                                        <Badge content="">
                                         </Badge>
                                     </div>
                                 </div>
@@ -176,7 +179,7 @@ function ExpertChatPage() {
                             <div className='flex justify-center '>
                                 <Badge overlap="circular" className='mb-3' color="green" placement="bottom-end">
                                     <Avatar
-                                        src={recipientdetails.profile_image ? recipientdetails.profile_image : "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"}
+                                        src={recipientdetails.profile_picture ? recipientdetails.profile_picture : "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"}
                                         alt="profile picture"
                                     />
                                 </Badge>
@@ -255,4 +258,4 @@ function ExpertChatPage() {
     )
 }
 
-export default ExpertChatPage
+export default UserChatPage
