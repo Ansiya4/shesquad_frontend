@@ -6,9 +6,9 @@ function ExpertsProtected() {
     const token = localStorage.getItem('token')
     if (token ){
         const decoded = jwtDecode(token);
-        if (decoded.is_admin && decoded.role === 'admin'){
+        if (decoded.is_admin){
             return <Navigate to={'/dashboard/'}/>
-        } else if (decoded.role === 'expert'){
+        } else if (decoded.category){
             return <Outlet/>
         } else{
             return <Navigate to={'/'}/>

@@ -11,10 +11,20 @@ import {
   MenuList,
   MenuItem,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export function StickyNavbar() {
+  const navigate = useNavigate()
+  const token = localStorage.getItem('token')
+  const decoded = jwtDecode(token);
+
   const [openNav, setOpenNav] = React.useState(false);
+
+  const LogOut = () => {
+    localStorage.removeItem('token')
+    navigate('/login')
+  }
 
   React.useEffect(() => {
     window.addEventListener(
@@ -31,9 +41,9 @@ export function StickyNavbar() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" className="flex items-center">
+        <Link to={'/'} className="flex items-center">
           Home
-        </a>
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -41,18 +51,24 @@ export function StickyNavbar() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" className="flex items-center">
+        {decoded.category ? (
+          <Link to={'/expert/chat'} className="flex items-center">
+            Message
+          </Link>
+        ) : (<Link to={'/chat'} className="flex items-center">
           Message
-        </a>
+        </Link>)}
+
+
       </Typography>
       <Menu>
         <MenuHandler>
           <Avatar className="h-7 w-7 border border-gray-900" src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
         </MenuHandler>
-        <MenuList>
-         <Link to='/expertprofile'> <MenuItem>My Profile</MenuItem></Link>
-          <MenuItem>Log out</MenuItem>
-        </MenuList>
+        {token ? (<MenuList>
+          <Link to={decoded.category ? '/expertprofile' : 'userprofile'}> <MenuItem>My Profile</MenuItem></Link>
+          <MenuItem onClick={LogOut}>Log out</MenuItem>
+        </MenuList>) : ''}
       </Menu>
     </ul>
   );
@@ -71,22 +87,21 @@ export function StickyNavbar() {
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             <div className="flex items-center gap-x-1">
-              <Link to='/login'> <Button
-                variant="text"
-                size="sm"
-                className="hidden lg:inline-block"
-              >
-                <span>Log in</span>
-              </Button></Link>
-              <Link to='/register'>
-                <Button
-                  variant="text"
-                  size="sm"
-                  className="hidden lg:inline-block"
-                >
-                  <span>Register</span>
-                </Button>
-              </Link>
+              {token ? null : (
+                <React.Fragment>
+                  <Link to='/login'>
+                    <Button variant="text" size="sm" className="hidden lg:inline-block">
+                      <span>Log in</span>
+                    </Button>
+                  </Link>
+                  <Link to='/register'>
+                    <Button variant="text" size="sm" className="hidden lg:inline-block">
+                      <span>Register</span>
+                    </Button>
+                  </Link>
+                </React.Fragment>
+              )}
+
             </div>
             <IconButton
               variant="text"

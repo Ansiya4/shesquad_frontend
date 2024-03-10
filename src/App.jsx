@@ -11,32 +11,48 @@ import Dashboard from './Pages/Dashboard/Dashboard';
 import ExpertsProtected from './ProtectedRouter/ExpertsProtected';
 import ExpertHomePage from './Pages/Expert/ExpertHomePage';
 import ExpertProfile from './Pages/Expert/ExpertProfile';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Layout from './Pages/Dashboard/Layout';
+import Users from './Pages/Dashboard/Users';
+import Issues from './Pages/Dashboard/Issues';
+import ExpertCategory from './Pages/Dashboard/ExpertCategory';
+import UserChatPage from './Pages/User/UserChatPage';
+import ExpertChatPage from './Pages/Expert/ExpertChatPage';
+import UserProfile from './Pages/User/UserProfile';
 
 function App() {
 
   return (
     <>
-    <ToastContainer />
-       <Router>
-        <Routes>
-          {/* <Route element={<PrivateRoutes />}> */}
-            <Route path="register/" element={<RegisterPage />} />
-            <Route path="login/" element={<LoginPage />} />
-          {/* </Route> */}
-          {/* <Route element={<UserProtected />}> */}
+      <ToastContainer />
+        <Router>
+          <Routes>
+            <Route element={<PrivateRoutes />}>
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            </Route>
+            <Route element={<UserProtected />}>
             <Route path="/" element={<UserHomePage />} />
-          {/* </Route> */}
-          {/* <Route element={<ExpertsProtected />}> */}
-            <Route path="experthome/" element={<ExpertHomePage />} />
-            <Route path="expertprofile/" element={<ExpertProfile />} />
-          {/* </Route> */}
-          {/* <Route element={<AdminProtected />}> */}
-            <Route path="dashboard" element={<Dashboard />} />
-          {/* </Route> */}
-        </Routes>
-      </Router>
+            <Route path="/chat" element={<UserChatPage />} />
+            <Route path="/userprofile" element={<UserProfile />} />
+            </Route>
+            <Route element={<ExpertsProtected />}>
+            <Route path="/experthome" element={<ExpertHomePage />} />
+            <Route path="/expertprofile" element={<ExpertProfile />} />
+            <Route path="/expert/chat" element={<ExpertChatPage />} />
+            </Route>
+            <Route element={<AdminProtected />}>
+            <Route path="/dashboard" element={<Layout> </Layout>}>
+            <Route path="/dashboard/" element={<Dashboard />} />
+            <Route path="/dashboard/users" element={<Users />} />
+            <Route path="/dashboard/issues" element={<Issues />} />
+            <Route path="/dashboard/expert-category" element={<ExpertCategory />} />
+
+            </Route>
+            </Route>
+          </Routes>
+        </Router>
     </>
   )
 }
