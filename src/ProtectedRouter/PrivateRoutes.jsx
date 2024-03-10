@@ -8,9 +8,8 @@ function PrivateRoutes() {
         const decoded = jwtDecode(token);
         if (decoded.is_admin){
             return <Navigate to={'/dashboard/'}/>
-        } else if (decoded.role ==="expert"){
+        } else if (decoded.category){
             return <Navigate to={'/experthome/'}/>
-
         } 
         else {
            return <Navigate to={'/'}/>

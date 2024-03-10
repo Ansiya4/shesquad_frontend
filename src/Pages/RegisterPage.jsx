@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import BgImage from '../assets/Image/mailimage.jpeg'
+import BgImage from '../assets/Image/mailimage.jpg'
 import {
   Card,
   Input,
@@ -12,12 +12,14 @@ import { useFormik } from 'formik';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import './LoginPage.css'
-// import { BaseUrl } from '../Constants/Constants';t'
+import { BACKEND_BASE_URL } from '../api/api';
 
 function RegisterPage() {
   const navigate = useNavigate()
   // Formic code
   const initialValues = {
+    first_name:"",
+    last_name:"",
     email: "",
     password: ""
   }
@@ -32,19 +34,17 @@ function RegisterPage() {
     initialValues: initialValues,
     validationSchema: RegisterSchema,
     onSubmit: async (values, { setSubmitting }) => {
-      // try {
-      //   const response = await axios.post(${BaseUrl}token/, values);
-      //   if (response.status === 200) {
-      //     const token = JSON.stringify(response.data);
-      //     localStorage.setItem("token", token);
-      //     ToastSuccess('Login completed successfully!');
-      //     navigate('/')
-      //   }
-      // } catch (error) {
-      //   ToastError(error.response?.data?.detail || 'An error occurred');
-      // } finally {
-      //   setSubmitting(false);
-      // }
+      try {
+        const response = await axios.post(`${BACKEND_BASE_URL}/accounts/register/`, values);
+        if (response.status === 201) {
+          ToastSuccess(response.data.message || 'Registraion successfully completed');
+          navigate('/login')
+        }
+      } catch (error) {
+        ToastError(error.response.data.email[0] || 'An error occurred');
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
   // Google Login Function

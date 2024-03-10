@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import BgImage from '../assets/Image/mailimage.jpeg'
+import BgImage from '../assets/Image/mailimage.jpg'
 import {
     Card,
     Input,
@@ -12,7 +12,8 @@ import { useFormik } from 'formik';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import './LoginPage.css'
-// import { BaseUrl } from '../Constants/Constants';
+import { BACKEND_BASE_URL } from '../api/api';
+import { jwtDecode } from 'jwt-decode';
 function LoginPage() {
   const navigate = useNavigate()
   // Formic code
@@ -31,19 +32,28 @@ function LoginPage() {
       initialValues: initialValues,
       validationSchema: LoginSchema,
       onSubmit: async (values, { setSubmitting }) => {
-          // try {
-          //   const response = await axios.post(${BaseUrl}token/, values);
-          //   if (response.status === 200) {
-          //     const token = JSON.stringify(response.data);
-          //     localStorage.setItem("token", token);
-          //     ToastSuccess('Login completed successfully!');
-          //     navigate('/')
-          //   }
-          // } catch (error) {
-          //   ToastError(error.response?.data?.detail || 'An error occurred');
-          // } finally {
-          //   setSubmitting(false);
-          // }
+          try {
+            const response = await axios.post(`${BACKEND_BASE_URL}/accounts/login/`, values);
+            if (response.status === 200) {
+              const token = JSON.stringify(response.data);
+              localStorage.setItem("token", token);
+              ToastSuccess('Login completed successfully!');
+              const decoded = jwtDecode(token);
+              if (decoded.is_admin){
+                navigate('/dashboard/')
+              } else if (decoded.category){
+                navigate('/experthome')
+              }else{
+                navigate('/')
+              }
+
+            }
+          } catch (error) {
+            ToastError(error.response?.data?.detail || 'An error occurred');
+            console.log(error);
+          } finally {
+            setSubmitting(false);
+          }
         },
       });
   // Google Login Function
@@ -57,7 +67,7 @@ function LoginPage() {
 
   useEffect(() => {
       if (guser && guser.access_token) {
-        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`)
+          axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`)
               .then((res) => {
                   console.log(res.data);
               })
