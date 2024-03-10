@@ -6,18 +6,47 @@ import {
     DialogBody,
     DialogFooter,
     Input,
-    Textarea,
     Typography,
   } from "@material-tailwind/react";
+import { UserProfileSchema } from "../../Validations/Validations";
+import { ToastError, ToastSuccess } from "../Toast/Toasts";
+import { useFormik } from "formik";
+
 
 function UserEditProfile() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(!open);
+    // Formic code
+  const initialValues = {
+    first_name: "",
+    last_name: "",
+    };
+  const { values, errors, touched, handleBlur, handleSubmit, handleChange } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: UserProfileSchema,
+      onSubmit: async (values, { setSubmitting }) => {
+        // try {
+        //   const response = await axios.post(${BaseUrl}token/, values);
+        //   if (response.status === 200) {
+        //     const token = JSON.stringify(response.data);
+        //     localStorage.setItem("token", token);
+        //     ToastSuccess('Login completed successfully!');
+        //     navigate('/')
+        //   }
+        // } catch (error) {
+        //   ToastError(error.response?.data?.detail || 'An error occurred');
+        // } finally {
+        //   setSubmitting(false);
+        // }
+      },
+    });
 
   return (
     <div>
         <Button className='w-28 bg-pink-900' onClick={handleOpen}>Edit</Button>
         <Dialog open={open} size="xs" handler={handleOpen}>
+        <form onSubmit={handleSubmit}>
         <div className="flex items-center justify-between">
           <DialogHeader className="flex flex-col items-start">
             {" "}
@@ -41,8 +70,29 @@ function UserEditProfile() {
         </div>
         <DialogBody>
           <div className="grid gap-6">
-            <Input variant="standard" name="last_name" label="First name"/>
-            <Input variant="standard" name="last_name" label="Last name"/>
+            <div>
+            <Input variant="standard" name="first_name" label="First name"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.first_name}/>
+            {touched.first_name && errors.first_name && (
+                  <div className="text-red-500 text-sm ">
+                    {errors.first_name}
+                  </div>
+                )}
+                </div>
+            <div>
+            <Input variant="standard" name="last_name" label="Last name"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.last_name}
+          />
+          {touched.last_name && errors.last_name && (
+                  <div className="text-red-500 text-sm ">
+                    {errors.last_name}
+                  </div>
+                )}
+            </div>
           </div>
         </DialogBody>
         <DialogFooter className="space-x-2">
@@ -53,6 +103,7 @@ function UserEditProfile() {
             submit
           </Button>
         </DialogFooter>
+        </form>
       </Dialog>
     </div>
   )

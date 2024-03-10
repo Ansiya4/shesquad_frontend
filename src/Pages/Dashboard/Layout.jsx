@@ -1,6 +1,6 @@
 import DashboardNavbar from '../../Components/navbar/DashboardNavbar'
 import { Sidebar } from '../../Components/Sidebar/Sidebar'
-// import { Footer } from '../../components/common/admin/Footer'
+import { FooterWithSocialLinks } from '../Footer'
 import { Outlet } from 'react-router-dom'
 function Layout() {
   return (
@@ -18,8 +18,7 @@ function Layout() {
               <Outlet />
             </div>
             <div>
-              {/* <Footer /> */}
-              Footer
+            <div className=''><FooterWithSocialLinks/></div>
             </div>
           </div>
         </div>

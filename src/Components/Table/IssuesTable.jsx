@@ -127,11 +127,11 @@ export function IssuesTable() {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
-                        <Typography variant="h5" color="blue-gray">
-                            Issues
+                        <Typography variant="h4" className="text-indigo-900 font-serif">
+                            ISSUES
                         </Typography>
                         <Typography color="gray" className="mt-1 font-normal">
-                            See information about all issues
+                            See information about all issues.
                         </Typography>
                     </div>
 

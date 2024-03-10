@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DashboardNavbar from '../../Components/navbar/DashboardNavbar'
 import { Sidebar } from '../../Components/Sidebar/Sidebar'
 import {
@@ -9,7 +9,25 @@ import {
   ListItemPrefix,
   Avatar,
 } from "@material-tailwind/react";
+import { GetLastloginList } from '../../services/services';
+
+
+
 function Dashboard() {
+  const [list, setList] = useState([])
+  const GetLastUserlistFunc = async () => {
+    try {
+      const res = await GetLastloginList()
+      if (res.status === 200) {
+        setList(res.data)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    GetLastUserlistFunc()
+  }, [])
   return (
     <div className='mt-4 ms-7 me-4 border h-[calc(100vh-8.5rem)] rounded-md px-5'>
 
@@ -22,7 +40,7 @@ function Dashboard() {
           </div>
 
           <div className='flex justify-around'>
-            <p className='font-bold text-black text-xl'>Total Users</p>
+            <p className='font-bold text-black text-xl font-serif'>NORMAL USERS</p>
             <p className='font-bold text-black'>155</p>
           </div>
 
@@ -35,7 +53,7 @@ function Dashboard() {
           </div>
 
           <div className='flex justify-around'>
-            <p className='font-bold text-black text-xl'>Expert Users</p>
+            <p className='font-bold text-black text-xl font-serif'>EXPERTS</p>
             <p className='font-bold text-black'>155</p>
           </div>
 
@@ -49,7 +67,7 @@ function Dashboard() {
           </div>
 
           <div className='flex justify-around'>
-            <p className='font-bold text-black text-xl'>Total Users</p>
+            <p className='font-bold text-black text-xl font-serif'>ISSUES</p>
             <p className='font-bold text-black'>155</p>
           </div>
 
@@ -59,106 +77,37 @@ function Dashboard() {
         <p className='text-sm text-gray-600'>Last Logining</p>
         <Card className="">
           <List>
-            <ListItem selected>
-              <ListItemPrefix>
-                <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
-              </ListItemPrefix>
-              <div className='w-full flex justify-between'>
-                <div>
-                  <Typography variant="h6" color="blue-gray">
-                    Tania Andrew
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    Software Engineer @ Material Tailwind
-                  </Typography>
-                </div>
-                <div>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    last Login
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    10/10/10
-                  </Typography>
-                </div>
-              </div>
 
-            </ListItem>
-            <ListItem selected>
-              <ListItemPrefix>
-                <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
-              </ListItemPrefix>
-              <div className='w-full flex justify-between'>
-                <div>
-                  <Typography variant="h6" color="blue-gray">
-                    Tania Andrew
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    Software Engineer @ Material Tailwind
-                  </Typography>
+            {list.map((item, index) => (
+              <ListItem key={index} selected>
+                <ListItemPrefix>
+                <Avatar variant="circular" alt="candice" src={item.profile_picture ? item.profile_picture : "https://docs.material-tailwind.com/img/face-1.jpg"} />                </ListItemPrefix>
+                <div className='w-full flex justify-between'>
+                  <div>
+                    <Typography variant="h6" color="blue-gray">
+                      {item.first_name} {item.last_name}
+                    </Typography>
+                    <Typography variant="small" color="gray" className="font-normal">
+                      {item.email}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography variant="small" color="gray" className="font-normal">
+                      last Login
+                    </Typography>
+                    <Typography variant="small" color="gray" className="font-normal">
+                      {item.lastLogin}
+                    </Typography>
+                  </div>
                 </div>
-                <div>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    last Login
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    10/10/10
-                  </Typography>
-                </div>
-              </div>
+              </ListItem>
+            ))}
 
-            </ListItem>
-            <ListItem selected>
-              <ListItemPrefix>
-                <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
-              </ListItemPrefix>
-              <div className='w-full flex justify-between'>
-                <div>
-                  <Typography variant="h6" color="blue-gray">
-                    Tania Andrew
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    Software Engineer @ Material Tailwind
-                  </Typography>
-                </div>
-                <div>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    last Login
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    10/10/10
-                  </Typography>
-                </div>
-              </div>
-
-            </ListItem>
-            <ListItem selected>
-              <ListItemPrefix>
-                <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
-              </ListItemPrefix>
-              <div className='w-full flex justify-between'>
-                <div>
-                  <Typography variant="h6" color="blue-gray">
-                    Tania Andrew
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    Software Engineer @ Material Tailwind
-                  </Typography>
-                </div>
-                <div>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    last Login
-                  </Typography>
-                  <Typography variant="small" color="gray" className="font-normal">
-                    10/10/10
-                  </Typography>
-                </div>
-              </div>
-
-            </ListItem>
           </List>
         </Card>
       </div>
     </div>
+
   )
 }
 

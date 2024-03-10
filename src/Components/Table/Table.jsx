@@ -146,11 +146,11 @@ export function Table() {
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
-                        <Typography variant="h5" color="blue-gray">
-                            Members list
+                        <Typography variant="h4" color="blue-gray" className="text-indigo-900 font-serif">
+                            MEMBERS LIST
                         </Typography>
                         <Typography color="gray" className="mt-1 font-normal">
-                            See information about all members
+                            See information about all members.
                         </Typography>
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">

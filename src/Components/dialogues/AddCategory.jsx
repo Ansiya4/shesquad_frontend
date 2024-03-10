@@ -65,12 +65,12 @@ export function AddCategory(getCategorylistFunc) {
 
   return (
     <>
-      <Button onClick={handleOpen} className="flex items-center gap-3" size="sm">
+      <Button onClick={handleOpen} className="flex items-center gap-3 bg-pink-900" size="sm">
         Add Category
       </Button>
       <Dialog open={open} handler={handleOpen}>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <DialogHeader>Create category</DialogHeader>
+          <DialogHeader className="text-indigo-900 font-serif">CREATE CATEGORY</DialogHeader>
           <div className="mx-5">
             <div className="flex gap-5 mb-2">
               <div className="w-full">
@@ -117,13 +117,13 @@ export function AddCategory(getCategorylistFunc) {
           <DialogFooter>
             <Button
               variant="text"
-              color="red"
+              color="gray"
               onClick={handleOpen}
               className="mr-1"
             >
               <span>Cancel</span>
             </Button>
-            <Button variant="gradient" color="green" type="submit" >
+            <Button type="submit" className="bg-pink-900">
               <span>Add Category</span>
             </Button>
           </DialogFooter>
